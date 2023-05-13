@@ -1,0 +1,7 @@
+.hover-cooming-soon {
+    transition: 0.3s;
+    cursor: pointer;
+    &:hover {
+        color: #aef77e !important;
+    }
+}
