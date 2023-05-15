@@ -19,19 +19,19 @@ export default function PrimarySearchAppBar() {
     const menuList = [
         {
             title: 'AirDrop',
-            path: '/'
+            path: 'mint'
         },
         {
             title: 'About',
-            path: '/'
+            path: 'about'
         },
         {
             title: 'Economics',
-            path: '/'
+            path: 'economics'
         },
         {
             title: 'Staking',
-            path: '/earn'
+            path: '/staking'
         }
     ]
     const scrollToAnchor = (anchorName) => {

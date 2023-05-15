@@ -85,7 +85,7 @@ function Home() {
                     alt=""
                 />
                 <img
-                    className="position-absolute start-0 d-none d-md-block"
+                    className="btc-logoimg position-absolute"
                     style={{ width: 135, top: -160 }}
                     src={home1}
                     alt=""
@@ -94,6 +94,18 @@ function Home() {
                     className="position-absolute d-none d-md-block"
                     style={{ width: 97, left: 180, bottom: 140 }}
                     src={home3}
+                    alt=""
+                />
+                <img
+                    className="d-block d-md-none position-absolute"
+                    style={{
+                        width: '200px',
+                        height: '200px',
+                        top: 50,
+                        left: '50%',
+                        transform: 'translateX(-50%)'
+                    }}
+                    src={home16}
                     alt=""
                 />
             </div>
@@ -204,7 +216,7 @@ function Home() {
             <div className="container mt-9 position-relative">
                 <img style={{ width: '100%' }} src={home20} alt="" />
                 <div
-                    className="text-white position-absolute top-50 start-50 translate-middle"
+                    className="text-white position-absolute top-50 start-50 translate-middle z-1"
                     style={{ width: 340 }}>
                     <h2 className="text-center">Earn BitCoin</h2>
                     <img
@@ -216,12 +228,12 @@ function Home() {
                     <p className="fs-7 text-center">Use BTCMEME as your savings to earn BTC.</p>
                 </div>
                 <img
-                    className="position-absolute start-50 translate-middle-x"
+                    className="btc-home13 position-absolute z-0"
                     style={{ width: 250, bottom: -150 }}
                     src={home13}
                     alt=""
                 />
-                <div className="position-absolute" style={{ right: -60, bottom: 90 }}>
+                <div className="btc-home14 position-absolute" style={{ right: -60, bottom: 90 }}>
                     <img style={{ width: 307 }} src={home14} alt="" />
                     <span
                         className="hover-cooming-soon position-absolute text-white fs-3"

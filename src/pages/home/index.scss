@@ -5,3 +5,27 @@
         color: #aef77e !important;
     }
 }
+.btc-logoimg {
+    left: 0;
+    @media (max-width: 768px) {
+        transform: scale(0.7);
+        left: -30px;
+    }
+}
+.btc-home13 {
+    left: 50%;
+    transform: translateX(-50%) !important;
+    @media (max-width: 768px) {
+        transform: scale(0.8) translateX(-50%) !important;
+    }
+}
+.btc-home14 {
+    // bottom: 0;
+    @media (max-width: 768px) {
+        // left: auto;
+        right: auto !important;
+        left: 42% !important;
+        transform: scale(0.7) translateX(-50%) !important;
+        bottom: -280px !important;
+    }
+}

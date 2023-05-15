@@ -9,6 +9,7 @@ import web3Wallet from '@/utils/web3-wallet.js'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
+import Drawer from '@mui/material/Drawer'
 
 const MySnackbar = styled(Snackbar)`
     .MuiSnackbarContent-message {
@@ -53,6 +54,10 @@ export default function PrimarySearchAppBar() {
         }
         setOpenSnackbar(false)
     }
+    const [opentTggleDrawer, setOpentTggleDrawer] = React.useState(false)
+    const toggleDrawer = () => {
+        setOpentTggleDrawer(false)
+    }
     const action = (
         <React.Fragment>
             <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
@@ -73,6 +78,37 @@ export default function PrimarySearchAppBar() {
                 message="Cooming Soon"
                 action={action}
             />
+            <React.Fragment>
+                <Drawer
+                    anchor="left"
+                    open={opentTggleDrawer}
+                    onClose={() => {
+                        toggleDrawer()
+                    }}>
+                    <div
+                        className="px-4 pt-5"
+                        style={{ width: 220, height: '100%', backgroundColor: '#09090b' }}>
+                        {menuList.map((item) => {
+                            return (
+                                <div
+                                    key={item.title}
+                                    className="header-item text-nowrap py-3"
+                                    style={{ color: '#fff' }}
+                                    onClick={() => {
+                                        toggleDrawer()
+                                        if (item.path === '/staking') {
+                                            setOpenSnackbar(true)
+                                            return
+                                        }
+                                        scrollToAnchor(item.path)
+                                    }}>
+                                    {item.title}
+                                </div>
+                            )
+                        })}
+                    </div>
+                </Drawer>
+            </React.Fragment>
             <header className="header-box webkit-scrollbar-none pb-0">
                 <div className="logo-box d-flex-center">
                     <img
@@ -83,9 +119,16 @@ export default function PrimarySearchAppBar() {
                         }}
                         alt=""
                     />
-                    BTCMEME
+                    {/* BTCMEME */}
                 </div>
-                <div className="header-item-box">
+                <div
+                    className="d-block d-md-none me-3"
+                    onClick={() => {
+                        setOpentTggleDrawer(true)
+                    }}>
+                    caidan
+                </div>
+                <div className="header-item-box d-none d-md-flex">
                     {menuList.map((item) => {
                         return (
                             <div
