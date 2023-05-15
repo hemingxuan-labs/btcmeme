@@ -66,7 +66,7 @@ export default function PrimarySearchAppBar() {
                 open={openSnackbar}
                 autoHideDuration={2500}
                 onClose={handleClose}
-                message="Cooming Soon"
+                message="Coming Soon"
                 action={action}
             />
             <footer

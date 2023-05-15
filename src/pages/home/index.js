@@ -164,9 +164,9 @@ function Home() {
                             <MyButton
                                 className="text-nowrap px-7"
                                 onClick={() => {
-                                    sendClaims()
+                                    // sendClaims()
                                 }}>
-                                Claim
+                                Coming Soon
                             </MyButton>
                         </div>
                         <img
@@ -243,7 +243,7 @@ function Home() {
                             transform: 'translate(-50%,-50%) rotate(13deg)',
                             whiteSpace: 'nowrap'
                         }}>
-                        Cooming Soon
+                        Coming Soon
                     </span>
                 </div>
             </div>

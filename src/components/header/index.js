@@ -75,7 +75,7 @@ export default function PrimarySearchAppBar() {
                 open={openSnackbar}
                 autoHideDuration={2500}
                 onClose={handleClose}
-                message="Cooming Soon"
+                message="Coming Soon"
                 action={action}
             />
             <React.Fragment>
@@ -119,15 +119,39 @@ export default function PrimarySearchAppBar() {
                         }}
                         alt=""
                     />
-                    {/* BTCMEME */}
+                    <span className="d-none d-md-block text-white" style={{ color: '#fffff' }}>
+                        BTCMEME
+                    </span>
+                    <div
+                        className="d-block d-md-none me-3"
+                        onClick={() => {
+                            setOpentTggleDrawer(true)
+                        }}>
+                        <svg
+                            t="1684145061413"
+                            className="icon"
+                            viewBox="0 0 1024 1024"
+                            version="1.1"
+                            xmlns="http://www.w3.org/2000/svg"
+                            p-id="6944"
+                            width="32"
+                            height="32">
+                            <path
+                                d="M133.310936 296.552327l757.206115 0c19.781623 0 35.950949-16.169326 35.950949-35.950949 0-19.781623-15.997312-35.950949-35.950949-35.950949L133.310936 224.650428c-19.781623 0-35.950949 16.169326-35.950949 35.950949C97.359987 280.383 113.529313 296.552327 133.310936 296.552327z"
+                                fill="#fff"
+                                p-id="6945"></path>
+                            <path
+                                d="M890.51705 476.135058 133.310936 476.135058c-19.781623 0-35.950949 16.169326-35.950949 35.950949 0 19.781623 16.169326 35.950949 35.950949 35.950949l757.206115 0c19.781623 0 35.950949-16.169326 35.950949-35.950949C926.467999 492.304384 910.298673 476.135058 890.51705 476.135058z"
+                                fill="#fff"
+                                p-id="6946"></path>
+                            <path
+                                d="M890.51705 727.447673 133.310936 727.447673c-19.781623 0-35.950949 15.997312-35.950949 35.950949s16.169326 35.950949 35.950949 35.950949l757.206115 0c19.781623 0 35.950949-15.997312 35.950949-35.950949S910.298673 727.447673 890.51705 727.447673z"
+                                fill="#fff"
+                                p-id="6947"></path>
+                        </svg>
+                    </div>
                 </div>
-                <div
-                    className="d-block d-md-none me-3"
-                    onClick={() => {
-                        setOpentTggleDrawer(true)
-                    }}>
-                    caidan
-                </div>
+
                 <div className="header-item-box d-none d-md-flex">
                     {menuList.map((item) => {
                         return (
