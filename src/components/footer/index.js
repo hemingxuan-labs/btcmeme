@@ -94,9 +94,15 @@ export default function PrimarySearchAppBar() {
                             })}
                         </div>
                         <div className="d-flex-center">
-                            <img className="mx-2" style={{ width: 34 }} src={home5} alt="" />
-                            <img className="mx-2" style={{ width: 34 }} src={home6} alt="" />
-                            <img className="mx-2" style={{ width: 34 }} src={home7} alt="" />
+                            <a
+                                href="https://twitter.com/BTC__MEME?t=9i6KLhgiQVCTQrzPatJk2A&s=09"
+                                target="_blank"
+                                rel="noreferrer">
+                                <img className="mx-2" style={{ width: 34 }} src={home5} alt="" />
+                            </a>
+                            <a href="https://t.me/BTCMEMELABS" target="_blank" rel="noreferrer">
+                                <img className="mx-2" style={{ width: 34 }} src={home6} alt="" />
+                            </a>
                         </div>
                     </div>
                     <div

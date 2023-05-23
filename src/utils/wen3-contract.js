@@ -1,16 +1,17 @@
 import { ethers } from 'ethers'
 import web3Wallet from '@/utils/web3-wallet.js'
 import poposABI from '@/assets/abi/popos.json'
-import mintpoolABI from '@/assets/abi/mintpool.json'
+import Erc20ABI from '@/assets/abi/erc20.json'
+import message from '@/components/message'
 
 const contracts = {
     popos: {
-        address: '0xd6127A1763b8E314089d57bbD1fF3fE080991C83',
+        address: '0xed1d5f7c24d523381de22c36cd4d2cdbd658bf52',
         abi: poposABI
     },
-    mintpool: {
-        address: '0xdE3b84fC3b8BA2BC169A87eb9C1bdA85c42845f0',
-        abi: mintpoolABI
+    erc20: {
+        address: '0x2b8af5414fc5c40a4ae9228bad0a83d485e029b0',
+        abi: Erc20ABI
     }
 }
 // https://goerli.etherscan.io/address/0xb8416ccf3cb8c325a6718d7b3855d6509a94b2e3
@@ -39,16 +40,34 @@ export default class ethersContract {
     }
     async getWalletAddress() {
         this.web3WalletNow = new web3Wallet()
-        await this.web3WalletNow.getWalletAddress()
-        // await this.web3WalletNow.switchChain()
     }
     async sendClaim() {
         try {
             await this.getWalletAddress()
+            const res1 = await this.web3WalletNow.getWalletAddress()
+            const res2 = await this.web3WalletNow.switchChain()
             await this.getContract('popos')
-            return await this.contractSender.claim()
-        } catch (e) {
-            console.error(e)
+            if (res1 && res2) {
+                return await this.contractSender.claim()
+            }
+        } catch (error) {
+            this.messageError(error)
         }
+    }
+    async getBalanceOf() {
+        try {
+            await this.getContract('erc20')
+            const res = await this.contractCaller.balanceOf(contracts.popos.address)
+            return parseInt(Number(res._hex) / '1000000000000000000')
+        } catch (error) {
+            this.messageError(error)
+        }
+    }
+    messageError(error) {
+        message.error({
+            content: 'Internal JSON-RPC error.',
+            duration: 3000,
+            iconShow: false
+        })
     }
 }

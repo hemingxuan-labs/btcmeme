@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import web3Wallet from '@/utils/web3-wallet.js'
 import * as echarts from 'echarts'
 import './index.scss'
 import home1 from '@/assets/image/home1.png'
@@ -23,6 +25,11 @@ import TextField from '@mui/material/TextField'
 import { MyButton } from '@/assets/mui-css/mui-css.js'
 import { useNavigate } from 'react-router-dom'
 import wen3Contract from '@/utils/wen3-contract.js'
+import Accordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import Typography from '@mui/material/Typography'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const BorderLinearProgress = styled(LinearProgress)`
     height: 6px !important;
@@ -44,14 +51,72 @@ const MyTextField = styled(TextField)`
         border-bottom: 2px solid #f7931b !important;
     }
 `
+const MyAccordion = styled(Accordion)`
+    background-color: #212529 !important;
+    color: rgb(247, 147, 27) !important;
+    .MuiAccordionDetails-root {
+        color: #fff !important;
+    }
+`
 function Home() {
     const navigate = useNavigate()
     const [progress, setProgress] = useState(60)
     const [termdays, setTermdays] = useState(365)
+    const [countdown, setCountdown] = useState(`0 day 15h 26m 48s`)
+    const web3WalletNow = new web3Wallet()
     const sendClaims = () => {
+        if (countdown === 'Connect Wallet') {
+            web3WalletNow.requestSignature()
+            return
+        }
+        if (countdown !== 'Claim') return
         const wen3ContractNow = new wen3Contract()
         wen3ContractNow.sendClaim()
     }
+    const walletAddress = useSelector((state) => state.wallet.walletAddress)
+    useEffect(() => {
+        const startSetInterval = () => {
+            setInterval(() => {
+                // 设置结束时间
+                var endTime = new Date(1684868400000)
+                // 获取当前时间
+                var nowTime = new Date()
+                if (nowTime >= endTime) {
+                    if (walletAddress) {
+                        return setCountdown(`Claim`)
+                    } else {
+                        return setCountdown(`Connect Wallet`)
+                    }
+                }
+                // 计算剩余时间（毫秒）
+                var remainingTime = endTime - nowTime
+                // 计算天数
+                var days = Math.floor(remainingTime / (1000 * 60 * 60 * 24))
+                // 计算小时数
+                var hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+                // 计算分钟数
+                var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))
+                // 计算秒数
+                var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000)
+                // 输出倒计时
+                setCountdown(`${days} day ${hours}h ${minutes}m ${seconds}s`)
+            }, 1000)
+        }
+        startSetInterval()
+    }, [walletAddress])
+
+    const [linearProgress, setLinearProgress] = useState(20)
+    useEffect(() => {
+        async function baof() {
+            const wen3ContractNow = new wen3Contract()
+            const res = await wen3ContractNow.getBalanceOf()
+            setLinearProgress(convertToPercentage(23100000000 - res, 23100000000))
+        }
+        function convertToPercentage(value, total) {
+            return (value / total) * 100
+        }
+        baof()
+    }, [])
     return (
         <div className="min-vh-100 overflow-hidden">
             <div className="container mt-8 position-relative z-1">
@@ -158,15 +223,16 @@ function Home() {
                             <BorderLinearProgress
                                 className="mt-1"
                                 variant="determinate"
-                                value={0}></BorderLinearProgress>
+                                value={linearProgress}></BorderLinearProgress>
                         </div>
                         <div className="mt-5 mb-5 d-flex-center">
                             <MyButton
                                 className="text-nowrap px-7"
                                 onClick={() => {
-                                    // sendClaims()
+                                    sendClaims()
                                 }}>
-                                Coming Soon
+                                {/* Coming Soon */}
+                                {countdown}
                             </MyButton>
                         </div>
                         <img
@@ -294,6 +360,59 @@ function Home() {
                             alt=""
                         />
                     </div>
+                </div>
+            </div>
+
+            <div className="container mt-9 pb-9 position-relative" id="economics">
+                <h1 className="text-center text-white" style={{ fontSize: 50 }}>
+                    F.A.Qs
+                </h1>
+                <div className="mt-4">
+                    <MyAccordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}>
+                            <Typography>What is BECMEME?</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                btcmeme is a meme coin issued to commemorate Satoshi Nakamoto,
+                                btcmeme coin is the real meme coin
+                            </Typography>
+                        </AccordionDetails>
+                    </MyAccordion>
+                    <MyAccordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}>
+                            <Typography>How do I claim the $BTCMEME airdrop?</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                1. Connect your wallet <br />
+                                2. Check if you are eligible <br />
+                                3. Claim your free tokens
+                            </Typography>
+                        </AccordionDetails>
+                    </MyAccordion>
+                    <MyAccordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}>
+                            <Typography>Will there be more NFTs in the future?</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                A series of NFTs will be launched in the future for adopters, AI
+                                peripheral product development, and more.
+                            </Typography>
+                        </AccordionDetails>
+                    </MyAccordion>
+                    <MyAccordion>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon sx={{ color: '#fff' }} />}>
+                            <Typography>Where can I trade $BTCMEME?</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography>
+                                BTCMEME already trading on MEXC, LBANK , CAMELOT DEX, BITKAN &
+                                ASCENDEX. Stay tuned for more exchange listings.
+                            </Typography>
+                        </AccordionDetails>
+                    </MyAccordion>
                 </div>
             </div>
         </div>

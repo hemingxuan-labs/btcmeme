@@ -1,6 +1,8 @@
 import { store } from '@/store/index.js'
 import { setWalletAddress, setWalletToken } from '@/store/wallet.js'
 import { ethers } from 'ethers'
+import message from '@/components/message'
+
 export default class web3Wallet {
     constructor() {
         // 单例模式
@@ -21,6 +23,7 @@ export default class web3Wallet {
     }
     async getWalletAddress() {
         // 返回钱包地址 建立连接
+        console.log(this.provider, 'this.providerthis.providerthis.provider')
         try {
             const accounts = await this.provider.send('eth_requestAccounts', [])
             this.modifyWalletAddress(accounts[0])
@@ -47,19 +50,22 @@ export default class web3Wallet {
             return false
         }
     }
-    async switchChain(chainId) {
+    async switchChain() {
         // 切换网络
         try {
-            await window.ethereum.request({
-                method: 'wallet_switchEthereumChain',
-                params: [
-                    {
-                        chainId: '0x1'
-                    }
-                ]
+            await this.switchAddChain({
+                chainId: '0xa4b1',
+                chainName: 'Arbitrum One',
+                name: 'ETH',
+                symbol: 'ETH',
+                decimals: 18,
+                blockExplorerUrls: ['https://arbiscan.io'],
+                rpcUrls: ['https://arb1.arbitrum.io/rpc']
             })
+            return true
         } catch (error) {
             console.log(error)
+            return false
         }
     }
     async switchAddChain(chainObject) {
@@ -70,39 +76,24 @@ export default class web3Wallet {
             })
             return true
         } catch (e) {
-            if (e.code === 4902) {
-                try {
-                    await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [
-                            {
-                                chainId: chainObject.chainId,
-                                chainName: chainObject.chainName,
-                                nativeCurrency: {
-                                    name: chainObject.name,
-                                    symbol: chainObject.symbol, // 2-6 characters long
-                                    decimals: chainObject.decimals
-                                },
-                                blockExplorerUrls: chainObject.blockExplorerUrls,
-                                rpcUrls: chainObject.rpcUrls
-                            }
-                        ]
-                    })
-                } catch (addError) {
-                    ElMessage({
-                        grouping: true,
-                        message: addError.message,
-                        type: 'error'
-                    })
-                    return false
-                }
-            }
-            if (e.code === 4001) {
-                ElMessage({
-                    grouping: true,
-                    message: e.message,
-                    type: 'error'
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_addEthereumChain',
+                    params: [
+                        {
+                            chainId: chainObject.chainId,
+                            chainName: chainObject.chainName,
+                            nativeCurrency: {
+                                name: chainObject.name,
+                                symbol: chainObject.symbol, // 2-6 characters long
+                                decimals: chainObject.decimals
+                            },
+                            blockExplorerUrls: chainObject.blockExplorerUrls,
+                            rpcUrls: chainObject.rpcUrls
+                        }
+                    ]
                 })
+            } catch (addError) {
                 return false
             }
         }
@@ -117,8 +108,11 @@ export default class web3Wallet {
         store.dispatch(setWalletToken(china))
     }
     messageError(error) {
-        console.log(error, 'Sbackbar.current')
-        // SimpleSnackbarRef.current.open({ message: error })
+        message.error({
+            content: error.message,
+            duration: 3000,
+            iconShow: false
+        })
     }
     web3Listen() {
         // this.getAssetsChina()
