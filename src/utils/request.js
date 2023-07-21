@@ -1,13 +1,15 @@
 import axios from 'axios'
-// import store from '@/store/index'
+import { store } from '@/store/index.js'
 let service = axios.create({
     baseURL: '',
-    timeout: 20000,
+    timeout: 20000
 })
 // 请求拦截器
 service.interceptors.request.use(
     (config) => {
-        // config.headers['AuthAuthorize'] = store.state.persistence.userToken || ''
+        console.log(store, 'storestorestore')
+
+        config.headers['AuthAuthorize'] = store.getState().wallet.userToken || ''
         // config.url = import.meta.env.VITE_REQUEST_URL + config.url
         return config
     },

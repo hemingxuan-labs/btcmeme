@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import web3Wallet from '@/utils/web3-wallet.js'
-import * as echarts from 'echarts'
 import './index.scss'
 import home1 from '@/assets/image/home1.png'
 import home2 from '@/assets/image/home2.png'
@@ -30,6 +29,7 @@ import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { oauthRequestToken } from '@/api/index.js'
 
 const BorderLinearProgress = styled(LinearProgress)`
     height: 6px !important;
@@ -62,19 +62,27 @@ function Home() {
     const navigate = useNavigate()
     const [progress, setProgress] = useState(60)
     const [termdays, setTermdays] = useState(365)
-    const [countdown, setCountdown] = useState(`0 day 15h 26m 48s`)
+    const [countdown, setCountdown] = useState(`Claim`)
     const web3WalletNow = new web3Wallet()
-    const sendClaims = () => {
+    const sendClaims = async () => {
         if (countdown === 'Connect Wallet') {
             web3WalletNow.requestSignature()
             return
         }
         if (countdown !== 'Claim') return
-        const wen3ContractNow = new wen3Contract()
-        wen3ContractNow.sendClaim()
+        const res = await oauthRequestToken()
+        console.log(res)
+        // const wen3ContractNow = new wen3Contract()
+        // wen3ContractNow.sendClaim()
     }
     const walletAddress = useSelector((state) => state.wallet.walletAddress)
+
     useEffect(() => {
+        if (walletAddress) {
+            setCountdown(`Claim`)
+        } else {
+            setCountdown(`Connect Wallet`)
+        }
         const startSetInterval = () => {
             setInterval(() => {
                 // 设置结束时间
@@ -102,7 +110,7 @@ function Home() {
                 setCountdown(`${days} day ${hours}h ${minutes}m ${seconds}s`)
             }, 1000)
         }
-        startSetInterval()
+        // startSetInterval()
     }, [walletAddress])
 
     const [linearProgress, setLinearProgress] = useState(20)
@@ -125,9 +133,7 @@ function Home() {
                         <h1 className="text-white text-center m-auto" style={{ maxWidth: '460px' }}>
                             Redefine BitCoin In The MEME Community
                         </h1>
-                        <h5 className="mt-4 text-center text-white">
-                            Chancellor On Brink Of Second Bailout For Banks
-                        </h5>
+                        <h5 className="mt-4 text-center text-white">Chancellor On Brink Of Second Bailout For Banks</h5>
                     </div>
                     <div className="col-md-4">
                         <img
@@ -144,23 +150,9 @@ function Home() {
                 </div>
             </div>
             <div className="container-fluid p-0 position-relative z-0 mt-8" style={{ height: 200 }}>
-                <img
-                    className="position-absolute bottom-0 start-50 translate-middle-x"
-                    src={home2}
-                    alt=""
-                />
-                <img
-                    className="btc-logoimg position-absolute"
-                    style={{ width: 135, top: -160 }}
-                    src={home1}
-                    alt=""
-                />
-                <img
-                    className="position-absolute d-none d-md-block"
-                    style={{ width: 97, left: 180, bottom: 140 }}
-                    src={home3}
-                    alt=""
-                />
+                <img className="position-absolute bottom-0 start-50 translate-middle-x" src={home2} alt="" />
+                <img className="btc-logoimg position-absolute" style={{ width: 135, top: -160 }} src={home1} alt="" />
+                <img className="position-absolute d-none d-md-block" style={{ width: 97, left: 180, bottom: 140 }} src={home3} alt="" />
                 <img
                     className="d-block d-md-none position-absolute"
                     style={{
@@ -175,12 +167,7 @@ function Home() {
                 />
             </div>
             <div className="container-fluid mt-8 position-relative">
-                <img
-                    className="position-absolute top-50 start-0 translate-middle-y z-0"
-                    style={{ width: '300px' }}
-                    src={home21}
-                    alt="home21"
-                />
+                <img className="position-absolute top-50 start-0 translate-middle-y z-0" style={{ width: '300px' }} src={home21} alt="home21" />
                 <div
                     className="p-2 mx-auto position-relative z-1 position-relative"
                     style={{
@@ -199,31 +186,20 @@ function Home() {
                         <h3 className="text-white text-center mt-4">
                             You Can Claim <span style={{ color: '#F7931B' }}>$BTCMEME Now!</span>
                         </h3>
-                        <img
-                            className="d-block mx-auto mt-3"
-                            style={{ width: 72 }}
-                            src={home12}
-                            alt=""
-                        />
+                        <img className="d-block mx-auto mt-3" style={{ width: 72 }} src={home12} alt="" />
                         <p className="my-4 text-center text-white fs-6">
                             A total of <span style={{ color: '#F7931B' }}>23,100,000,000</span>
-                            $BTCMEME tokens are now available to be claimed by those who have
-                            claimed the $ARB airdrop.
+                            $BTCMEME tokens are now available to be claimed by those who have claimed the $ARB airdrop.
                             <br />
-                            $BTCMEME tokens that have not been claimed within 31 days will be used
-                            for the Community Long-Term Incentive Reward Program. <br />
-                            The $BTCMEME will be distributed to the top contributors of Arbitrum
-                            community and burned."
+                            $BTCMEME tokens that have not been claimed within 31 days will be used for the Community Long-Term Incentive Reward Program. <br />
+                            The $BTCMEME will be distributed to the top contributors of Arbitrum community and burned."
                         </p>
                         <div className="mt-4">
                             <div className="d-flex-between-center">
                                 <span style={{ color: '#6B5D2F' }}>0</span>
                                 <span style={{ color: '#6B5D2F' }}>23,100,000,000</span>
                             </div>
-                            <BorderLinearProgress
-                                className="mt-1"
-                                variant="determinate"
-                                value={linearProgress}></BorderLinearProgress>
+                            <BorderLinearProgress className="mt-1" variant="determinate" value={linearProgress}></BorderLinearProgress>
                         </div>
                         <div className="mt-5 mb-5 d-flex-center">
                             <MyButton
@@ -235,12 +211,7 @@ function Home() {
                                 {countdown}
                             </MyButton>
                         </div>
-                        <img
-                            className="position-absolute top-100 start-100 translate-middle"
-                            style={{ width: 197 }}
-                            src={home4}
-                            alt=""
-                        />
+                        <img className="position-absolute top-100 start-100 translate-middle" style={{ width: 197 }} src={home4} alt="" />
                     </div>
                 </div>
             </div>
@@ -260,45 +231,23 @@ function Home() {
                         <h2 className="text-white text-center m-auto" style={{ maxWidth: 476 }}>
                             Chancellor on brink of second bank bailout.
                         </h2>
-                        <img
-                            className="d-block mx-auto my-4"
-                            style={{ width: 72 }}
-                            src={home12}
-                            alt=""
-                        />
+                        <img className="d-block mx-auto my-4" style={{ width: 72 }} src={home12} alt="" />
                         <p className="mt-4 text-center text-white fs-6">
                             The design of BTCMEME is inspired by
-                            <span style={{ color: '#F7931B' }}>
-                                the world's first cryptocurrency
-                            </span>
-                            : BitCoin. We have the same belief, because this is a completely
-                            decentralized travel, and all decisions will be completely handed over
-                            to the community. BTCMEME will redefine BitCoin's position in the MEME
-                            community, wait and see.
+                            <span style={{ color: '#F7931B' }}>the world's first cryptocurrency</span>: BitCoin. We have the same belief, because this is a completely decentralized travel, and all
+                            decisions will be completely handed over to the community. BTCMEME will redefine BitCoin's position in the MEME community, wait and see.
                         </p>
                     </div>
                 </div>
             </div>
             <div className="container mt-9 position-relative">
                 <img style={{ width: '100%' }} src={home20} alt="" />
-                <div
-                    className="text-white position-absolute top-50 start-50 translate-middle z-1"
-                    style={{ width: 340 }}>
+                <div className="text-white position-absolute top-50 start-50 translate-middle z-1" style={{ width: 340 }}>
                     <h2 className="text-center">Earn BitCoin</h2>
-                    <img
-                        className="d-block mx-auto my-3"
-                        style={{ width: 72 }}
-                        src={home12}
-                        alt=""
-                    />
+                    <img className="d-block mx-auto my-3" style={{ width: 72 }} src={home12} alt="" />
                     <p className="fs-7 text-center">Use BTCMEME as your savings to earn BTC.</p>
                 </div>
-                <img
-                    className="btc-home13 position-absolute z-0"
-                    style={{ width: 250, bottom: -150 }}
-                    src={home13}
-                    alt=""
-                />
+                <img className="btc-home13 position-absolute z-0" style={{ width: 250, bottom: -150 }} src={home13} alt="" />
                 <div className="btc-home14 position-absolute" style={{ right: -60, bottom: 90 }}>
                     <img style={{ width: 307 }} src={home14} alt="" />
                     <span
@@ -314,26 +263,15 @@ function Home() {
                 </div>
             </div>
             <div className="container mt-9 py-9 position-relative" id="economics">
-                <img
-                    className="position-absolute"
-                    style={{ width: 418, bottom: 0, left: -20 }}
-                    src={home19}
-                    alt=""
-                />
+                <img className="position-absolute" style={{ width: 418, bottom: 0, left: -20 }} src={home19} alt="" />
                 <div className="row">
                     <div className="col-md-7">
                         <h2 className="text-white text-center m-auto" style={{ maxWidth: 476 }}>
                             completely fair distribution
                         </h2>
-                        <img
-                            className="d-block mx-auto my-4"
-                            style={{ width: 72 }}
-                            src={home12}
-                            alt=""
-                        />
+                        <img className="d-block mx-auto my-4" style={{ width: 72 }} src={home12} alt="" />
                         <p className="mt-4 text-center text-white fs-7" style={{ lineHeight: 3 }}>
-                            No holdings, fully distributed to the community and liquidity, no taxes,
-                            no whales, no giant pumps
+                            No holdings, fully distributed to the community and liquidity, no taxes, no whales, no giant pumps
                         </p>
                         <div className="d-flex-center mt-6">
                             <div className="mx-3">
@@ -373,10 +311,7 @@ function Home() {
                             <Typography>What is BECMEME?</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
-                                btcmeme is a meme coin issued to commemorate Satoshi Nakamoto,
-                                btcmeme coin is the real meme coin
-                            </Typography>
+                            <Typography>btcmeme is a meme coin issued to commemorate Satoshi Nakamoto, btcmeme coin is the real meme coin</Typography>
                         </AccordionDetails>
                     </MyAccordion>
                     <MyAccordion>
@@ -396,10 +331,7 @@ function Home() {
                             <Typography>Will there be more NFTs in the future?</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
-                                A series of NFTs will be launched in the future for adopters, AI
-                                peripheral product development, and more.
-                            </Typography>
+                            <Typography>A series of NFTs will be launched in the future for adopters, AI peripheral product development, and more.</Typography>
                         </AccordionDetails>
                     </MyAccordion>
                     <MyAccordion>
@@ -407,10 +339,7 @@ function Home() {
                             <Typography>Where can I trade $BTCMEME?</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography>
-                                BTCMEME already trading on MEXC, LBANK , CAMELOT DEX, BITKAN &
-                                ASCENDEX. Stay tuned for more exchange listings.
-                            </Typography>
+                            <Typography>BTCMEME already trading on MEXC, LBANK , CAMELOT DEX, BITKAN & ASCENDEX. Stay tuned for more exchange listings.</Typography>
                         </AccordionDetails>
                     </MyAccordion>
                 </div>

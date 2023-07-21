@@ -1,6 +1,7 @@
 import { store } from '@/store/index.js'
-import { setWalletAddress, setWalletToken } from '@/store/wallet.js'
+import { setWalletAddress, setWalletToken, setUserToken } from '@/store/wallet.js'
 import { ethers } from 'ethers'
+import { btcmemeUserDoLong } from '@/api/index.js'
 import message from '@/components/message'
 
 export default class web3Wallet {
@@ -39,8 +40,15 @@ export default class web3Wallet {
         if (!walletAddress) return
         if (store.getState().wallet.walletToken) return
         try {
-            let signature = await this.signer.signMessage('POPOS')
+            let signature = await this.signer.signMessage('BTCMEME')
             this.setWalletToken(signature)
+            const res = await btcmemeUserDoLong({
+                address: walletAddress,
+                message: 'BTCMEME',
+                signature
+            })
+            console.log(res, 'resresresres')
+            this.setUserToken(res)
             return {
                 address: walletAddress,
                 signature
@@ -103,6 +111,9 @@ export default class web3Wallet {
     }
     setWalletToken(signature) {
         store.dispatch(setWalletToken(signature))
+    }
+    setUserToken(signature) {
+        store.dispatch(setUserToken(signature))
     }
     setAssetsChina(china) {
         store.dispatch(setWalletToken(china))
